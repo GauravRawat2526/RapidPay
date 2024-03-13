@@ -23,22 +23,22 @@ This is the README file for the RapidPay API project.
 To apply database migrations, follow these steps:
 - cd into RapidPay projectt
 - Ensure EF Core Tools are Installed
-    dotnet tool install --global dotnet-ef
+    - dotnet tool install --global dotnet-ef
 - Create Initial Migration
-    dotnet ef migrations add InitialMigration
+    - dotnet ef migrations add InitialMigration
 - Update Database
-    dotnet ef database update
+    - dotnet ef database update
 
 ### Running the Application
 
 - Build and run the application.
 - The API will be accessible at the specified URL.
-Usage
-Endpoints
-/api/v1/card/create: Create a new card.
-/api/v1/card/pay: Make a payment.
-/api/v1/card/{cardNumber}/balance: Get the balance of a card.
-For more detailed API documentation, refer to the Swagger UI by navigating to /swagger when the application is running.
+- Usage
+- Endpoints
+    - /api/v1/card/create: Create a new card.
+    - /api/v1/card/pay: Make a payment.
+    - /api/v1/card/{cardNumber}/balance: Get the balance of a card.
+- For more detailed API documentation, refer to the Swagger UI by navigating to /swagger when the application is running.
 
 ### Testing
 
