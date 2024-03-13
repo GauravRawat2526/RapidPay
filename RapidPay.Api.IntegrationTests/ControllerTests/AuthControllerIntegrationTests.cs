@@ -1,18 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using RapidPay.Controllers;
 using RapidPay.Models;
 using RapidPay.Services;
 using Xunit;
 namespace RapidPay.Api.IntegrationTests.ControllerTests
 {
-	public class AuthControllerIntegrationTests : IDisposable
+    public class AuthControllerIntegrationTests : IDisposable
 	{
 
         private AuthController _controller;
         private ApplicationDbContext _context;
-        private Logger<AuthController> _logger;
 
         public AuthControllerIntegrationTests()
         {
@@ -33,20 +32,17 @@ namespace RapidPay.Api.IntegrationTests.ControllerTests
             config["JwtOptions:SigningKey"] = "ABCDeuejjysnfkebn@!!!&whfbwjwbcm@#jjk1389248BUE*@H@Nz#*@Y#KJNMBUYDF&^UT";
             config["JwtOptions:Issuer"] = "test_issuer";
             config["JwtOptions:Audience"] = "test_audience";
-
-            _controller = new AuthController(config, _context,_logger);
+            var logger = new NullLogger<AuthController>();
+            _controller = new AuthController(config, _context,logger);
         }
 
         [Fact]
         public void Login_ValidUser_ReturnsToken()
         {
-            // Arrange
             var user = new User { Email = "test@example.com", Password = "password" };
 
-            // Act
             var result = _controller.Login(user);
 
-            // Assert
             Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result);
             var okResult = result as Microsoft.AspNetCore.Mvc.OkObjectResult;
             Assert.NotNull(okResult.Value);
@@ -56,39 +52,30 @@ namespace RapidPay.Api.IntegrationTests.ControllerTests
         [Fact]
         public void Login_InvalidUser_ReturnsUnauthorized()
         {
-            // Arrange
             var user = new User { Email = "invalid@example.com", Password = "password" };
 
-            // Act
             var result = _controller.Login(user);
 
-            // Assert
             Assert.IsType<Microsoft.AspNetCore.Mvc.UnauthorizedResult>(result);
         }
 
         [Fact]
         public void Register_ValidUser_ReturnsOk()
         {
-            // Arrange
             var user = new User {  UserName = "test",Email = "newuser@example.com", Password = "password" };
 
-            // Act
             var result = _controller.Register(user);
 
-            // Assert
             Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result);
         }
 
         [Fact]
         public void Register_DuplicateUser_ReturnsConflict()
         {
-            // Arrange
             var user = new User { Email = "test@example.com", Password = "password" };
 
-            // Act
             var result = _controller.Register(user);
 
-            // Assert
             Assert.IsType<Microsoft.AspNetCore.Mvc.ConflictObjectResult>(result);
         }
 

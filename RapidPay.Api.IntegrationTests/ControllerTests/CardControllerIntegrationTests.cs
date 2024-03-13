@@ -6,6 +6,7 @@ using Serilog;
 using RapidPayAPI.Controllers;
 using Xunit;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace RapidPay.Api.IntegrationTests.ControllerTests
 {
@@ -14,8 +15,7 @@ namespace RapidPay.Api.IntegrationTests.ControllerTests
         private CardController _controller;
         private ApplicationDbContext _context;
         private Card _testCard;
-        private Logger<CardController> _logger;
-        
+
 
         public CardControllerIntegrationTests()
         {
@@ -24,10 +24,11 @@ namespace RapidPay.Api.IntegrationTests.ControllerTests
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
             _context = new ApplicationDbContext(options);
+            var logger = new NullLogger<CardController>();
 
             _testCard = new Card(300.0);
 
-            
+
             _testCard.CardNumber = "123456789123456";
 
             _context.Cards.Add(_testCard);
@@ -37,18 +38,16 @@ namespace RapidPay.Api.IntegrationTests.ControllerTests
             // Mock UniversalFeesExchange
             var feesExchange = new UniversalFeesExchange();
 
-            _controller = new CardController(_context, feesExchange, _logger);
+            _controller = new CardController(_context, feesExchange, logger);
         }
 
         [Fact]
         public async Task CreateCard_ValidRequest_ReturnsOk()
         {
-            // Arrange
             var cardRequest = new Card(200.0);
 
             var result = await _controller.CreateCard(cardRequest);
 
-            // Assert
             Assert.IsType<OkObjectResult>(result);
             var okResult = result as OkObjectResult;
             var card = okResult.Value as Card;
@@ -61,22 +60,16 @@ namespace RapidPay.Api.IntegrationTests.ControllerTests
         {   
             var amount = 300.0;
              
-                // Act
-                var result = await _controller.Pay(_testCard.CardNumber, amount);
+            var result = await _controller.Pay(_testCard.CardNumber, amount);
 
-            // Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
         public async Task GetBalance_ExistingCard_ReturnsOkWithBalance()
         {
-  
-
-            // Act
             var result = await _controller.GetBalance(_testCard.CardNumber);
 
-            // Assert
             Assert.IsType<OkObjectResult>(result);
             var okResult = result as OkObjectResult;
             Assert.NotNull(okResult.Value);

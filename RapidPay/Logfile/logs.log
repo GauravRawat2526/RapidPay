@@ -177,3 +177,59 @@ WHERE ROW_COUNT() = 1 AND `Id` = LAST_INSERT_ID();
 2024-03-13 13:00:13.528 +05:30 [INF] Request finished HTTP/1.1 POST https://localhost:7044/api/v1/card/pay?cardNumber=019582841670117&amount=523.647 - 0 - 200 - text/plain;+charset=utf-8 357.0609ms
 2024-03-13 16:03:53.078 +05:30 [INF] Starting RapidPay API
 2024-03-13 16:03:53.138 +05:30 [INF] Services Registered
+2024-03-13 16:37:17.584 +05:30 [INF] Starting RapidPay API
+2024-03-13 16:37:17.642 +05:30 [INF] Services Registered
+2024-03-13 16:38:11.306 +05:30 [INF] Starting RapidPay API
+2024-03-13 16:38:11.347 +05:30 [INF] Services Registered
+2024-03-13 16:38:40.374 +05:30 [INF] Starting RapidPay API
+2024-03-13 16:38:40.417 +05:30 [INF] Services Registered
+2024-03-13 16:38:41.187 +05:30 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE DATABASE `RapidPay`;
+2024-03-13 16:38:41.312 +05:30 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2024-03-13 16:38:41.339 +05:30 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='RapidPay' AND TABLE_NAME='__EFMigrationsHistory';
+2024-03-13 16:38:41.342 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-03-13 16:38:41.351 +05:30 [INF] Applying migration '20240313110811_InitialMigration'.
+2024-03-13 16:38:41.373 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2024-03-13 16:38:41.380 +05:30 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Cards` (
+    `Id` bigint NOT NULL AUTO_INCREMENT,
+    `CardNumber` varchar(15) CHARACTER SET utf8mb4 NOT NULL,
+    `Balance` double NOT NULL,
+    CONSTRAINT `PK_Cards` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2024-03-13 16:38:41.392 +05:30 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Payments` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `CardNumber` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Amount` double NOT NULL,
+    `Fee` double NOT NULL,
+    `Timestamp` datetime(6) NOT NULL,
+    CONSTRAINT `PK_Payments` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2024-03-13 16:38:41.398 +05:30 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Users` (
+    `ID` bigint NOT NULL AUTO_INCREMENT,
+    `UserName` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Password` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Email` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK_Users` PRIMARY KEY (`ID`)
+) CHARACTER SET=utf8mb4;
+2024-03-13 16:38:41.408 +05:30 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX `IX_Cards_CardNumber` ON `Cards` (`CardNumber`);
+2024-03-13 16:38:41.428 +05:30 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX `IX_Users_Email` ON `Users` (`Email`);
+2024-03-13 16:38:41.437 +05:30 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20240313110811_InitialMigration', '7.0.16');
+2024-03-13 16:39:06.177 +05:30 [INF] Starting RapidPay API
+2024-03-13 16:39:06.245 +05:30 [INF] Services Registered
